@@ -44,16 +44,9 @@ export const apiLogin = async (email: string, password: string) => {
             throw new Error('Respuesta de login incompleta - falta access_token');
         }
 
-        // Hacer más flexible el manejo del usuario
-        const user = response.data.user || {
-            id: 0,
-            email: email,
-            role: 'user' // valor por defecto
-        };
-
         return {
             access_token: response.data.access_token,
-            user: user
+            user: response.data.user
         };
     } catch (error) {
         console.error('Login error details:');

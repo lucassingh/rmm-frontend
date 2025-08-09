@@ -45,10 +45,8 @@ export const NavbarComponent = () => {
         return location.pathname === path;
     };
 
-    // Función para obtener las iniciales del email
     const getInitials = (email: string) => {
         if (!email) return '';
-        // Tomar las dos primeras letras antes del @
         const usernamePart = email.split('@')[0];
         return usernamePart.substring(0, 2).toUpperCase();
     };
@@ -113,7 +111,7 @@ export const NavbarComponent = () => {
                             Noticias
                         </Button>
 
-                        {user?.role === UserRole.ADMIN && (
+                        {(user?.role === UserRole.ADMIN || localStorage.getItem('userRole') === 'admin') && (
                             <Button
                                 component={Link}
                                 to="/users"

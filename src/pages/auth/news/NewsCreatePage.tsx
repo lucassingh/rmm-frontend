@@ -9,10 +9,11 @@ import {
     Paper,
     CircularProgress
 } from '@mui/material';
-import { CiImageOn } from 'react-icons/ci';
+import { CiImageOn, CiSquareChevLeft } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 import { useNews } from '../../../hooks/useNews';
+import theme from '../../../config/Theme.config';
 
 const validationSchema = Yup.object({
     title: Yup.string().required('El título es requerido'),
@@ -87,133 +88,146 @@ export const NewsCreatePage = () => {
     };
 
     return (
-        <Box sx={{ p: 4, maxWidth: 800, mx: 'auto' }}>
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'regular' }}>
-                Crear Nueva Noticia
-            </Typography>
+        <>
+            <Box sx={{ p: 4, maxWidth: 800, mx: 'auto' }}>
+                <Button
+                    startIcon={<CiSquareChevLeft size={40} />}
+                    onClick={() => navigate('/news')}
+                    sx={{
+                        mb: 3,
+                        color: theme.palette.primary.main,
+                    }}
+                >
+                    Volver al listado
+                </Button>
 
-            <Paper elevation={3} sx={{ p: 3 }}>
-                <form onSubmit={formik.handleSubmit}>
-                    {/* Campo para la imagen */}
-                    <Box sx={{ mb: 3 }}>
-                        <input
-                            accept="image/*"
-                            id="image-upload"
-                            type="file"
-                            style={{ display: 'none' }}
-                            onChange={handleImageChange}
-                            required
+                <Typography variant="h4" gutterBottom sx={{ fontWeight: 'regular' }}>
+                    Crear Nueva Noticia
+                </Typography>
+
+                <Paper elevation={3} sx={{ p: 3 }}>
+                    <form onSubmit={formik.handleSubmit}>
+                        {/* Campo para la imagen */}
+                        <Box sx={{ mb: 3 }}>
+                            <input
+                                accept="image/*"
+                                id="image-upload"
+                                type="file"
+                                style={{ display: 'none' }}
+                                onChange={handleImageChange}
+                                required
+                            />
+                            <label htmlFor="image-upload">
+                                <Button
+                                    variant="outlined"
+                                    component="span"
+                                    startIcon={<CiImageOn />}
+                                    fullWidth
+                                    sx={{ py: 2 }}
+                                >
+                                    Subir Imagen Principal
+                                </Button>
+                            </label>
+                            {imagePreview && (
+                                <Box sx={{ mt: 2, textAlign: 'center' }}>
+                                    <img
+                                        src={imagePreview}
+                                        alt="Preview"
+                                        style={{
+                                            maxHeight: 200,
+                                            maxWidth: '100%',
+                                            borderRadius: '4px'
+                                        }}
+                                    />
+                                </Box>
+                            )}
+                        </Box>
+
+                        {/* Título */}
+                        <TextField
+                            fullWidth
+                            id="title"
+                            name="title"
+                            label="Título"
+                            value={formik.values.title}
+                            onChange={formik.handleChange}
+                            error={formik.touched.title && Boolean(formik.errors.title)}
+                            helperText={formik.touched.title && formik.errors.title}
+                            sx={{ mb: 3 }}
                         />
-                        <label htmlFor="image-upload">
+
+                        {/* Subtítulo */}
+                        <TextField
+                            fullWidth
+                            id="subtitle"
+                            name="subtitle"
+                            label="Subtítulo"
+                            value={formik.values.subtitle}
+                            onChange={formik.handleChange}
+                            error={formik.touched.subtitle && Boolean(formik.errors.subtitle)}
+                            helperText={formik.touched.subtitle && formik.errors.subtitle}
+                            sx={{ mb: 3 }}
+                            multiline
+                            rows={2}
+                        />
+
+                        {/* Descripción de la imagen */}
+                        <TextField
+                            fullWidth
+                            id="image_description"
+                            name="image_description"
+                            label="Descripción de la imagen (para accesibilidad)"
+                            value={formik.values.image_description}
+                            onChange={formik.handleChange}
+                            error={formik.touched.image_description && Boolean(formik.errors.image_description)}
+                            helperText={formik.touched.image_description && formik.errors.image_description}
+                            sx={{ mb: 3 }}
+                        />
+
+                        {/* Cuerpo de la noticia */}
+                        <TextField
+                            fullWidth
+                            id="body"
+                            name="body"
+                            label="Contenido de la noticia"
+                            value={formik.values.body}
+                            onChange={formik.handleChange}
+                            error={formik.touched.body && Boolean(formik.errors.body)}
+                            helperText={formik.touched.body && formik.errors.body}
+                            multiline
+                            rows={10}
+                            sx={{ mb: 3 }}
+                        />
+
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            gap: 2
+                        }}>
                             <Button
                                 variant="outlined"
-                                component="span"
-                                startIcon={<CiImageOn />}
-                                fullWidth
-                                sx={{ py: 2 }}
+                                onClick={() => navigate('/news')}
+                                sx={{ minWidth: 120 }}
                             >
-                                Subir Imagen Principal
+                                Cancelar
                             </Button>
-                        </label>
-                        {imagePreview && (
-                            <Box sx={{ mt: 2, textAlign: 'center' }}>
-                                <img
-                                    src={imagePreview}
-                                    alt="Preview"
-                                    style={{
-                                        maxHeight: 200,
-                                        maxWidth: '100%',
-                                        borderRadius: '4px'
-                                    }}
-                                />
-                            </Box>
-                        )}
-                    </Box>
-
-                    {/* Título */}
-                    <TextField
-                        fullWidth
-                        id="title"
-                        name="title"
-                        label="Título"
-                        value={formik.values.title}
-                        onChange={formik.handleChange}
-                        error={formik.touched.title && Boolean(formik.errors.title)}
-                        helperText={formik.touched.title && formik.errors.title}
-                        sx={{ mb: 3 }}
-                    />
-
-                    {/* Subtítulo */}
-                    <TextField
-                        fullWidth
-                        id="subtitle"
-                        name="subtitle"
-                        label="Subtítulo"
-                        value={formik.values.subtitle}
-                        onChange={formik.handleChange}
-                        error={formik.touched.subtitle && Boolean(formik.errors.subtitle)}
-                        helperText={formik.touched.subtitle && formik.errors.subtitle}
-                        sx={{ mb: 3 }}
-                        multiline
-                        rows={2}
-                    />
-
-                    {/* Descripción de la imagen */}
-                    <TextField
-                        fullWidth
-                        id="image_description"
-                        name="image_description"
-                        label="Descripción de la imagen (para accesibilidad)"
-                        value={formik.values.image_description}
-                        onChange={formik.handleChange}
-                        error={formik.touched.image_description && Boolean(formik.errors.image_description)}
-                        helperText={formik.touched.image_description && formik.errors.image_description}
-                        sx={{ mb: 3 }}
-                    />
-
-                    {/* Cuerpo de la noticia */}
-                    <TextField
-                        fullWidth
-                        id="body"
-                        name="body"
-                        label="Contenido de la noticia"
-                        value={formik.values.body}
-                        onChange={formik.handleChange}
-                        error={formik.touched.body && Boolean(formik.errors.body)}
-                        helperText={formik.touched.body && formik.errors.body}
-                        multiline
-                        rows={10}
-                        sx={{ mb: 3 }}
-                    />
-
-                    <Box sx={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        gap: 2
-                    }}>
-                        <Button
-                            variant="outlined"
-                            onClick={() => navigate('/news')}
-                            sx={{ minWidth: 120 }}
-                        >
-                            Cancelar
-                        </Button>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            type="submit"
-                            disabled={isSubmitting}
-                            sx={{ minWidth: 120 }}
-                        >
-                            {isSubmitting ? (
-                                <CircularProgress size={24} color="inherit" />
-                            ) : (
-                                'Publicar Noticia'
-                            )}
-                        </Button>
-                    </Box>
-                </form>
-            </Paper>
-        </Box>
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                type="submit"
+                                disabled={isSubmitting}
+                                sx={{ minWidth: 120 }}
+                            >
+                                {isSubmitting ? (
+                                    <CircularProgress size={24} color="inherit" />
+                                ) : (
+                                    'Publicar Noticia'
+                                )}
+                            </Button>
+                        </Box>
+                    </form>
+                </Paper>
+            </Box>
+        </>
     );
 };

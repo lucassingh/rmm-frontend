@@ -30,6 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         try {
             const response = await api.get<{ user: User }>('/auth/verify');
+            localStorage.setItem('userRole', response.data.user.role);
             setUser(response.data.user);
             setIsAuthenticated(true);
             return true;
@@ -65,11 +66,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const { access_token, user } = await apiLogin(email, password);
 
             localStorage.setItem('token', access_token);
-            localStorage.setItem('userRole', user.role);
             setUser(user);
             setIsAuthenticated(true);
 
-            // Redirigir después de actualizar el estado
             navigate('/news');
         } catch (error) {
             console.error('Login error:', error);
